@@ -43,7 +43,6 @@ class RSP extends Component {
 
   changeHand = () => {
     const { imgCoord } = this.state;
-    console.log(imgCoord);
     if (imgCoord === rspCoords.바위) {
       this.setState({
         imgCoord: rspCoords.가위,
@@ -59,7 +58,7 @@ class RSP extends Component {
     }
   };
 
-  onClickBtn = (choice) => {
+  onClickBtn = (choice) => () => {
     const { imgCoord } = this.state;
     clearInterval(this.interval);
     const myScore = scores[choice];
@@ -97,13 +96,13 @@ class RSP extends Component {
           style={{ background: `url(https://en.pimg.jp/023/182/267/1/23182267.jpg) ${imgCoord} 0` }}
         />
         <div>
-          <button id="rock" className="btn" onClick={() => this.onClickBtn('바위')}>
+          <button id="rock" className="btn" onClick={this.onClickBtn('바위')}>
             바위
           </button>
-          <button id="scissor" className="btn" onClick={() => this.onClickBtn('가위')}>
+          <button id="scissor" className="btn" onClick={this.onClickBtn('가위')}>
             가위
           </button>
-          <button id="paper" className="btn" onClick={() => this.onClickBtn('보')}>
+          <button id="paper" className="btn" onClick={this.onClickBtn('보')}>
             보
           </button>
         </div>
