@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import GameMatcher from './GameMatcher';
 
 const Games = () => {
@@ -13,13 +13,12 @@ const Games = () => {
                 <Link to="/game/lotto-generator">로또생성기</Link>
                 &nbsp;
                 <Link to="/game/index">게임 매쳐</Link>
-                &nbsp;
             </div>
             <div>
-                <Switch>
-                    <Route exact path="/" render={(props) => <GameMatcher {...props} />} />
-                    <Route path="/game/:name" render={(props) => <GameMatcher {...props} />} />
-                </Switch>
+                <Routes>
+                    <Route path="/" element={<GameMatcher />} />
+                    <Route path="game/*" element={<GameMatcher />} />
+                </Routes>
             </div>
         </BrowserRouter>
     );
