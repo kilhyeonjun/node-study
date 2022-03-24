@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const refreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = {
-  name: 'wordrelay-setting',
+  name: 'wordRelay-setting',
   mode: 'development', // 실서비스: production
   devtool: 'eval',
   resolve: {

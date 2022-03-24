@@ -11,7 +11,7 @@ const rspCoords = {
 };
 
 const scores = {
-  가위: -1,
+  가위: 1,
   바위: 0,
   보: -1,
 };
