@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Link, Route } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import GameMatcher from './GameMatcher';
 
 const Games = () => {
@@ -16,7 +16,10 @@ const Games = () => {
                 &nbsp;
             </div>
             <div>
-                <Route path="/game/:name" component={GameMatcher} />
+                <Switch>
+                    <Route exact path="/" render={(props) => <GameMatcher {...props} />} />
+                    <Route path="/game/:name" render={(props) => <GameMatcher {...props} />} />
+                </Switch>
             </div>
         </BrowserRouter>
     );
