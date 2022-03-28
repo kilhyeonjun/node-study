@@ -40,14 +40,15 @@ const AppLayout = ({children}) => {
         <Col xs={24} md={6}>
           {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn} /> : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
         </Col>
-        <Col xs={24} md={12}></Col>
+        <Col xs={24} md={12}>
+          {children}
+        </Col>
         <Col xs={24} md={6}>
           <a href="https://github.com/kilhyeonjun/react-nodebird" target="_blank" rel="noreferrer noopener">
             Made by Kilhyeonjun
           </a>
         </Col>
       </Row>
-      {children}
     </div>
   );
 };
