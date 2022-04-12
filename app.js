@@ -39,23 +39,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// //document
-// const MongoClient = require('mongodb').MongoClient;
-// const { mongoDBurl } = require('./config/mongoDBconfig');
-// const client = new MongoClient(mongoDBurl, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// mongodb setup
-// const mongoose = require('mongoose');
-// mongoose.connect(mongoDBurl, {
-//     useNewUrlParser: true, 
-//     useUnifiedTopology: true,
-//     useCreateIndex: true
-// });
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function() {
-//     // we're connected!
-//     console.log('connected successfully');
-// });
-
 module.exports = app;
