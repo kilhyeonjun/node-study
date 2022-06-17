@@ -38,7 +38,7 @@ function* logOut() {
         yield put({
             type: LOG_OUT_SUCCESS,
         });
-    } catch (error) {
+    } catch (err) {
         yield put({
             type: LOG_OUT_FAILURE,
             data: err.response.data,
