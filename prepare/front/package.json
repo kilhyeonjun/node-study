@@ -36,6 +36,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "faker": "^5.5.3",
     "prettier": "^2.6.1"
   }
 }
