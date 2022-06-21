@@ -18,27 +18,6 @@ import {
   SIGN_UP_FAILURE,
 } from '../reducers/user';
 
-function logInAPI(data) {
-  return axios.post('/api/login', data);
-}
-
-function* logIn(action) {
-  try {
-    // const result = yield call(logInAPI, action.data);
-    yield delay(1000);
-    yield put({
-      type: LOG_IN_SUCCESS,
-      data: action.data,
-    });
-  } catch (err) {
-    console.error(err);
-    yield put({
-      type: LOG_IN_FAILURE,
-      error: err.response.data,
-    });
-  }
-}
-
 function followAPI(data) {
   return axios.post('/api/follow', data);
 }
@@ -81,14 +60,33 @@ function* unFollow(action) {
   }
 }
 
+function logInAPI(data) {
+  return axios.post('/user/login', data);
+}
+
+function* logIn(action) {
+  try {
+    const result = yield call(logInAPI, action.data);
+    yield put({
+      type: LOG_IN_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOG_IN_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function logOutAPI() {
-  return axios.post('/api/logout');
+  return axios.post('/user/logout');
 }
 
 function* logOut() {
   try {
-    // const result = yield call(logOutAPI);
-    yield delay(1000);
+    const result = yield call(logOutAPI);
     yield put({
       type: LOG_OUT_SUCCESS,
     });
@@ -102,7 +100,7 @@ function* logOut() {
 }
 
 function signUpAPI(data) {
-  return axios.post('http://localhost:3065/user', data);
+  return axios.post('/user', data);
 }
 
 function* signUp(action) {
@@ -111,7 +109,6 @@ function* signUp(action) {
     console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
-      data: action.data,
     });
   } catch (err) {
     console.error(err);
