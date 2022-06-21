@@ -27,9 +27,10 @@ function* loadPosts(action) {
             data: generateDummyPost(10),
         });
     } catch (err) {
+        console.error(err);
         yield put({
             type: LOAD_POSTS_FAILURE,
-            data: err.response.data,
+            error: err.response.data,
         });   
     }
 }
@@ -55,9 +56,10 @@ function* addPost(action) {
             data: id,
         });
     } catch (err) {
+        console.error(err);
         yield put({
             type: ADD_POST_FAILURE,
-            data: err.response.data,
+            error: err.response.data,
         });   
     }
 }
@@ -79,9 +81,10 @@ function* removePost(action) {
             data: action.data,
         });
     } catch (err) {
+        console.error(err);
         yield put({
             type: REMOVE_POST_FAILURE,
-            data: err.response.data,
+            error: err.response.data,
         });   
     }
 }
@@ -99,9 +102,10 @@ function* addComment(action) {
             data: action.data,
         });
     } catch (err) {
+        console.error(err);
         yield put({
             type: ADD_COMMENT_FAILURE,
-            data: err.response.data,
+            error: err.response.data,
         });   
     }
 }
