@@ -1,21 +1,21 @@
-const express = require("express");
+const express = require('express');
 
-const { Post, User, Image, Comment } = require("../models");
+const {Post, User, Image, Comment} = require('../models');
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const posts = await Post.findAll({
       limit: 10,
       order: [
-        ["createdAt", "DESC"],
-        [Comment, "createdAt", "DESC"],
+        ['createdAt', 'DESC'],
+        [Comment, 'createdAt', 'DESC'],
       ],
       include: [
         {
           model: User,
-          attributes: ["id", "nickname"],
+          attributes: ['id', 'nickname'],
         },
         {
           model: Image,
@@ -25,14 +25,14 @@ router.get("/", async (req, res, next) => {
           include: [
             {
               model: User,
-              attributes: ["id", "nickname"],
+              attributes: ['id', 'nickname'],
             },
           ],
         },
         {
           model: User,
-          as: "Likers",
-          attributes: ["id"],
+          as: 'Likers',
+          attributes: ['id'],
         },
       ],
     });
