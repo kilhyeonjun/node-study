@@ -8,9 +8,9 @@ const e = require("express");
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-    if(req.user){
+    if (req.user) {
       const fullUserWithoutPassword = await User.findOne({
         where: { id: req.user.id },
         attributes: {
@@ -19,29 +19,29 @@ router.get('/', async (req, res, next) => {
         include: [
           {
             model: Post,
-            attributes: ['id'],
+            attributes: ["id"],
           },
           {
             model: User,
             as: "Followings",
-            attributes: ['id'],
+            attributes: ["id"],
           },
           {
             model: User,
             as: "Followers",
-            attributes: ['id'],
+            attributes: ["id"],
           },
         ],
       });
       return res.status(200).json(fullUserWithoutPassword);
-    }else{
+    } else {
       res.status(200).json(null);
     }
   } catch (error) {
     console.error(error);
     next(error);
   }
-})
+});
 
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
@@ -65,17 +65,17 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         include: [
           {
             model: Post,
-            attributes: ['id'],
+            attributes: ["id"],
           },
           {
             model: User,
             as: "Followings",
-            attributes: ['id'],
+            attributes: ["id"],
           },
           {
             model: User,
             as: "Followers",
-            attributes: ['id'], 
+            attributes: ["id"],
           },
         ],
       });
@@ -111,6 +111,24 @@ router.post("/logout", isLoggedIn, (req, res) => {
   req.logout();
   req.session.destroy();
   res.send("ok");
+});
+
+router.patch("/nickname", isLoggedIn, async (req, res, next) => {
+  try {
+    console.log(req.body);
+    await User.update(
+      {
+        nickname: req.body.nickname,
+      },
+      {
+        where: { id: req.user.id },
+      }
+    );
+    res.status(200).json({ nickname: req.body.nickname });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 module.exports = router;
