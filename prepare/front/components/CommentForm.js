@@ -22,7 +22,7 @@ const CommentForm = ({post}) => {
     console.log(post.id, commentText);
     dispatch({
       type: ADD_COMMENT_REQUEST,
-      data: {content: commentText, postId: post.id, userId: id},
+      data: {content: commentText, postId: post.id},
     });
   }, [commentText, id]);
 
