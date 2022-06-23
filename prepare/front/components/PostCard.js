@@ -6,16 +6,24 @@ import {EllipsisOutlined, HeartOutlined, MessageOutlined, RetweetOutlined, Heart
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import {REMOVE_POST_REQUEST} from '../reducers/post';
+import {LIKE_POST_REQUEST, UNLIKE_POST_REQUEST, REMOVE_POST_REQUEST} from '../reducers/post';
 import FollowButton from './FollowButton';
 
 const PostCard = ({post}) => {
   const dispatch = useDispatch();
   const {removePostLoading} = useSelector((state) => state.post);
-  const [liked, setLiked] = useState(false);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
-  const onToggleLike = useCallback(() => {
-    setLiked((prev) => !prev);
+  const onLike = useCallback(() => {
+    dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+  const onUnLike = useCallback(() => {
+    dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    });
   }, []);
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev);
@@ -29,6 +37,7 @@ const PostCard = ({post}) => {
   }, []);
 
   const id = useSelector((state) => state.user.me?.id);
+  const liked = post.Likers.find((v) => v.id === id);
   return (
     <div style={{marginBottom: 20}}>
       <Card
@@ -36,9 +45,9 @@ const PostCard = ({post}) => {
         actions={[
           <RetweetOutlined key="retweet" />,
           liked ? (
-            <HeartTwoTone twoToneColor="#eb2f96" key="heart" onClick={onToggleLike} />
+            <HeartTwoTone twoToneColor="#eb2f96" key="heart" onClick={onUnLike} />
           ) : (
-            <HeartOutlined key="heart" onClick={onToggleLike} />
+            <HeartOutlined key="heart" onClick={onLike} />
           ),
           <MessageOutlined key="comment" onClick={onToggleComment} />,
           <Popover
@@ -100,6 +109,7 @@ PostCard.prototype = {
     createdAt: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.object),
     Images: PropTypes.arrayOf(PropTypes.object),
+    Likers: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
 };
 
