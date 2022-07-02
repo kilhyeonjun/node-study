@@ -1,10 +1,13 @@
 import React, {useEffect} from 'react';
 import AppLayout from '../components/AppLayout';
 import {useSelector, useDispatch} from 'react-redux';
+import {END} from 'redux-saga';
+import axios from 'axios';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
-import {LOAD_USER_REQUEST} from '../reducers/user';
+import {LOAD_MY_INFO_REQUEST} from '../reducers/user';
 import {LOAD_POSTS_REQUEST} from '../reducers/post';
+import wrapper from '../store/configureStore';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -16,15 +19,6 @@ const Home = () => {
       alert(retweetError);
     }
   }, [retweetError]);
-
-  useEffect(() => {
-    dispatch({
-      type: LOAD_USER_REQUEST,
-    });
-    dispatch({
-      type: LOAD_POSTS_REQUEST,
-    });
-  }, []);
 
   useEffect(() => {
     function onScroll() {
@@ -52,5 +46,21 @@ const Home = () => {
     </AppLayout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({req}) => {
+  const cookie = req ? req.headers.cookie : '';
+  axios.defaults.headers.Cookie = '';
+  if (req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  store.dispatch({
+    type: LOAD_MY_INFO_REQUEST,
+  });
+  store.dispatch({
+    type: LOAD_POSTS_REQUEST,
+  });
+  store.dispatch(END);
+  await store.sagaTask.toPromise();
+});
 
 export default Home;
