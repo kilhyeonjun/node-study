@@ -1,14 +1,18 @@
 import React, {useCallback, useEffect, useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Avatar, Button, Card, Comment, List, Popover} from 'antd';
-import {useSelector, useDispatch} from 'react-redux';
 import {EllipsisOutlined, HeartOutlined, MessageOutlined, RetweetOutlined, HeartTwoTone} from '@ant-design/icons';
+import Link from 'next/link';
+import moment from 'moment';
+
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import {LIKE_POST_REQUEST, UNLIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST} from '../reducers/post';
 import FollowButton from './FollowButton';
-import Link from 'next/link';
+
+moment.locale('ko');
 
 const PostCard = ({post}) => {
   const dispatch = useDispatch();
@@ -96,6 +100,7 @@ const PostCard = ({post}) => {
       >
         {post.RetweetId && post.Retweet ? (
           <Card cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}>
+            <div style={{float: 'right'}}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
             <Card.Meta
               avatar={
                 <Link href={`/user/${post.Retweet.User.id}`}>
@@ -109,17 +114,20 @@ const PostCard = ({post}) => {
             />
           </Card>
         ) : (
-          <Card.Meta
-            avatar={
-              <Link href={`/user/${post.User.id}`}>
-                <a>
-                  <Avatar>{post.User.nickname[0]}</Avatar>
-                </a>
-              </Link>
-            }
-            title={post.User.nickname}
-            description={<PostCardContent postData={post.content} />}
-          />
+          <>
+            <div style={{float: 'right'}}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
+            <Card.Meta
+              avatar={
+                <Link href={`/user/${post.User.id}`}>
+                  <a>
+                    <Avatar>{post.User.nickname[0]}</Avatar>
+                  </a>
+                </Link>
+              }
+              title={post.User.nickname}
+              description={<PostCardContent postData={post.content} />}
+            />
+          </>
         )}
       </Card>
       {commentFormOpened && (
