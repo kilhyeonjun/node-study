@@ -27,10 +27,12 @@ db.sequelize
 
 passportConfig();
 
+let port = 3065;
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
   app.use(hpp());
   app.use(helmet());
+  port = 80;
 } else {
   app.use(morgan('dev'));
 }
@@ -64,6 +66,6 @@ app.use('/posts', postsRouter);
 app.use('/user', userRouter);
 app.use('/hashtag', hashtagRouter);
 
-app.listen(3065, () => {
+app.listen(port, () => {
   console.log('서버 실행 중');
 });
