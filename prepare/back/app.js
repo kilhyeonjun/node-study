@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
   app.use(hpp());
   app.use(helmet());
-  port = 80;
+  // port = 80;
 } else {
   app.use(morgan('dev'));
 }
