@@ -5,7 +5,7 @@ import postSaga from './post';
 import userSaga from './user';
 import {backURL} from '../config/config';
 
-axios.defaults.baseURL = baseURL;
+axios.defaults.baseURL = backURL;
 axios.defaults.withCredentials = true;
 
 export default function* rootSaga() {
