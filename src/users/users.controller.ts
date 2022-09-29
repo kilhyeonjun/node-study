@@ -1,10 +1,11 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
+  NotFoundException,
   Post,
-  Req,
-  Res,
+  Response,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -35,12 +36,24 @@ export class UsersController {
     return user || false;
   }
 
-  @UseGuards(new NotLoggedInGuard())
   @ApiOperation({ summary: '회원가입' })
+  @UseGuards(NotLoggedInGuard)
   @Post()
-  async join(@Body() body: JoinRequestDto) {
-    await this.usersService.join(body.email, body.nickname, body.password);
-    return;
+  async join(@Body() data: JoinRequestDto) {
+    const user = this.usersService.findByEmail(data.email);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    const result = await this.usersService.join(
+      data.email,
+      data.nickname,
+      data.password,
+    );
+    if (result) {
+      return 'ok';
+    } else {
+      throw new ForbiddenException();
+    }
   }
 
   @ApiOkResponse({
@@ -58,11 +71,10 @@ export class UsersController {
     return user;
   }
 
-  @UseGuards(new LoggedInGuard())
+  @UseGuards(LoggedInGuard)
   @ApiOperation({ summary: '로그아웃' })
   @Post('logout')
-  logout(@Req() req, @Res() res) {
-    req.logOut();
+  logout(@Response() res) {
     res.clearCookie('connect.sid', { httpOnly: true });
     res.send('ok');
   }
