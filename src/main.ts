@@ -6,13 +6,24 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
+import path from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  if (process.env.NODE_ENV === 'production') {
+    app.enableCors({ origin: ['*'], credentials: true });
+  } else {
+    app.enableCors({ origin: true, credentials: true });
+  }
+
+  app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads',
+  });
 
   const config = new DocumentBuilder()
     .setTitle('슬랙 클론 API')
