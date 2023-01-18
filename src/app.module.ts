@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './config/configuration';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfigAsync } from './config/typeorm.config';
 
 @Module({
   imports: [
@@ -11,6 +13,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
       load: [configuration],
       isGlobal: true,
     }),
+    TypeOrmModule.forRootAsync(typeOrmConfigAsync),
   ],
   controllers: [AppController],
   providers: [AppService],
