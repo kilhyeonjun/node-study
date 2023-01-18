@@ -5,7 +5,9 @@ declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  const port = process.env.PORT || 8060;
+  await app.listen(port);
+  console.log(`Server is running at http://localhost:${port}...`);
 
   if (module.hot) {
     module.hot.accept();
