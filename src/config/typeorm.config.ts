@@ -8,17 +8,19 @@ import { User } from '../entities/user.entity';
 
 export default class TypeOrmConfig {
   static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {
+    const { host, port, username, password, database, synchronize, logging } =
+      configService.get('typeorm');
     return {
       type: 'mysql',
-      host: configService.get('TYPEORM_HOST') || 'localhost',
-      port: configService.get('TYPEORM_PORT') || 3306,
-      username: configService.get('TYPEORM_USERNAME'),
-      password: configService.get('TYPEORM_PASSWORD'),
-      database: configService.get('TYPEORM_DATABASE'),
+      host: host || 'localhost',
+      port: port || 3306,
+      username: username,
+      password: password,
+      database: database,
       autoLoadEntities: true,
       charset: 'utf8mb4',
-      synchronize: configService.get<boolean>('TYPEORM_SYNCHRONIZE') || false,
-      logging: configService.get<LoggerOptions>('TYPEORM_LOGGING') || false,
+      synchronize: synchronize || false,
+      logging: logging || false,
       keepConnectionAlive: true,
       entities: [User],
     };
