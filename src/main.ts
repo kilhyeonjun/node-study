@@ -2,6 +2,9 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import passport from 'passport';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
 
 declare const module: any;
 
@@ -17,6 +20,21 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  app.use(cookieParser());
+  console.log(configService.get('cookieSecret'));
+  app.use(
+    session({
+      resave: false,
+      saveUninitialized: false,
+      secret: configService.get('cookieSecret'),
+      cookie: {
+        httpOnly: true,
+      },
+    }),
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   const port = configService.get('PORT') || 8060;
   await app.listen(port);
