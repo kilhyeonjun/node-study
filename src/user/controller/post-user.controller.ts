@@ -1,8 +1,16 @@
-import { Controller, Inject, UseGuards, Post, Body, Res } from '@nestjs/common';
+import {
+  Controller,
+  Inject,
+  UseGuards,
+  Post,
+  Body,
+  Res,
+  Req,
+} from '@nestjs/common';
 import { LocalAuthGuard } from '../../auth/local-auth.guard';
 import { LoggedInGuard } from '../../auth/logged-in.guard';
 import { User } from '../../common/decorators/user.decorator';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import {
   PostUserInboundPort,
   PostUserInboundPortInputDto,
@@ -29,8 +37,13 @@ export class PostUserController {
 
   @UseGuards(LoggedInGuard)
   @Post('logout')
-  logout(@Res() res: Response) {
-    res.clearCookie('connect.sid', { httpOnly: true });
-    res.send('ok');
+  logout(@Req() req: Request, @Res() res: Response) {
+    req.session.destroy(function (err) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      res.send('ok');
+    });
   }
 }

@@ -5,6 +5,8 @@ import { AppModule } from './app.module';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import redis from 'redis';
+import createRedisStore from 'connect-redis';
 
 declare const module: any;
 
@@ -21,18 +23,31 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  // Session
+  const RedisStore = createRedisStore(session);
+  const redisStoreInfo = {
+    url: 'redis://localhost:6379', // 레디스 호스팅 주소
+    logErrors: true, // 레디스 에러 로깅
+  };
+
+  const client = redis.createClient(redisStoreInfo);
+
+  const sessionInfo = {
+    resave: false,
+    saveUninitialized: false,
+    secret: configService.get('cookieSecret'),
+    name: 'sessionId',
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 3000,
+    },
+    rolling: true,
+    store: new RedisStore({ client }),
+  };
+
+  app.use(session(sessionInfo));
   app.use(cookieParser());
-  console.log(configService.get('cookieSecret'));
-  app.use(
-    session({
-      resave: false,
-      saveUninitialized: false,
-      secret: configService.get('cookieSecret'),
-      cookie: {
-        httpOnly: true,
-      },
-    }),
-  );
   app.use(passport.initialize());
   app.use(passport.session());
 
